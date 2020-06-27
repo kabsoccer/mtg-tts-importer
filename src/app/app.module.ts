@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent, HelpContentDialog } from './app.component';
 import { CardListComponent } from './card-list/card-list.component';
 import { CardDetailComponent } from './card-detail/card-detail.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -50,7 +50,8 @@ import {MatTreeModule} from '@angular/material/tree';
     AppComponent,
     CardListComponent,
     CardDetailComponent,
-    CardSearchComponent
+    CardSearchComponent,
+    HelpContentDialog
   ],
   imports: [
     BrowserModule,

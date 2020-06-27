@@ -24,7 +24,7 @@ export class CardSearchComponent implements OnInit {
     // console.log(this.cardNamesString.value);
     this.cardNamesArray = this.cardNamesString.value.trim().split(/\s*\n+\s*/g);
     this.cardNamesArray = this.cardNamesArray.filter(name => name != "");
-    console.log(this.cardNamesArray);
+    //console.log(this.cardNamesArray);
     return;
   }
 }

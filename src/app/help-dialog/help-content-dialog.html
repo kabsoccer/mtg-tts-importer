@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>Help</h2>
+<mat-dialog-content>
+    <h3>Importing Decklist</h3>
+    <p>
+        To get started, you need to import your deck from a deck builder, like TappedOut or Archidekt. The import list must be in the following format:<br>
+        <code>1 Card Name<br>3 Card Name</code><br>
+        Click the <strong>Import</strong> button to load the specified cards.
+    </p>
+    <br>
+    
+    <h3>Choosing a Commander</h3>
+    <p>
+        Once the cards have loaded, you will need to pick a commander for your deck. The first section of the card viewer will show a list of legal commanders
+        from the imported cards as long as no commander is selected. To choose a commander, click the <mat-icon>security</mat-icon> icon below the card. To deselect a commander
+        and move the card back to the main deck, click the <mat-icon>person_remove</mat-icon> icon. The app supports adding multiple commanders, but does not
+        check for the legality of your deck.
+    </p>
+    <br>
+
+    <h3>Choosing Card Art</h3>
+    <p>
+        Clicking the <mat-icon>style</mat-icon> icon below a card will load a list of all printings of that card. Swapping between the printings will update the
+        image in real-time. Additionally, you may choose the image quality of your card art by selecting an option from the <strong>Quality</strong> dropdown above the card
+        viewer.
+    </p>
+    <p><strong>Tip: </strong>After clicking the <mat-icon>style</mat-icon> icon, use the up and down arrow keys to quickly switch card arts.</p>
+    <br>
+
+    <h3>Tokens</h3>
+    <p>
+        When loading the cards from the deck list, the app will also load any associated tokens that are created by cards in the deck list. You can change
+        the art of these tokens just like a normal card.
+    </p>
+    <p><strong>Tip: </strong>Each section of the card viewer is collapsible. To see the tokens without scrolling too far, collapse the <strong>Main Deck</strong> section.</p>
+    <br>
+
+    <h3>Card Backs</h3>
+    <p>
+        To use a custom card back when exporting, insert a link to an image url in the <strong>Card Back Image URL</strong> field, above the card viewer. A preview of the image
+        will be displayed in the <strong>Card Back</strong> section of the card viewer if a valid image is provided. The default MTG card back will be used if no url is given.
+    </p>
+    <br>
+
+    <h3>Exporting a Deck</h3>
+    <p>
+        Once you are satisfied with your deck, give it a name and click the <strong>Export</strong> button to download a .json file containing
+        the deck object format for Tabletop Simulator. To import the deck in TTS, find the downloaded file and move it to your TTS Saved Objects folder:<br>
+        <code>Documents > My games > Tabletop Simulator > Saves > Saved Objects</code><br>
+        In Tabletop Simulator, the deck object should now show up in the <code>Objects > Saved Objects</code> menu. Drag the object onto your table, and your cards
+        should appear. There will be multiple piles:
+    </p>
+    <ul>
+        <li>Main Deck</li>
+        <li>Commander(s)</li>
+        <li>Tokens</li>
+        <li>Double-Sided Cards</li>
+    </ul>
+    <br>
+
+    <h3>Troubleshooting</h3>
+    <p>
+        If you run into any issues while using the app, you can help me identify the errors. If a card fails to import, or you notice other weird behaviors within the app,
+        open up the dev tools console by pressing <strong>F12</strong>. Check the console tab for any red error messages and send me a screenshot.
+    </p>
+    <p>
+        If you have an issue with your cards loading in TTS, send me your deck list so that I can investigate the issue locally.
+    </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

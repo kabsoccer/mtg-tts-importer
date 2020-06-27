@@ -32,6 +32,8 @@ export class CardListComponent implements OnInit {
     },
     type_line: ""
   } as Card;
+  loadingCards = false;
+  pendingOperations: boolean[] = [];
 
   imgQualityOptions = [
     {name: "png", value: "png"},
@@ -43,7 +45,6 @@ export class CardListComponent implements OnInit {
   imgQuality: FormControl = new FormControl(this.imgQualityOptions[0].value);
   deckName: FormControl = new FormControl('');
   cardBack: FormControl = new FormControl('');
-
 
   ngOnInit(): void {
     //this.getCards();
@@ -62,11 +63,14 @@ export class CardListComponent implements OnInit {
     this.tokenList = [];
     this.tokenIdList = [];
     this.commanderSuggestions = [];
+    this.pendingOperations = [];
+    this.loadingCards = true;
     if (this.commanderCards.length > 0) {
       this.commanderCards.forEach(card => card.isCommander === false)
     }
     this.commanderCards = [];
     if (!this.cardNames || this.cardNames.length === 0) {
+      this.loadingCards = false;
       return;
     }
     
@@ -77,10 +81,17 @@ export class CardListComponent implements OnInit {
       var name = lineSplit[1];
       this.cardNamesOnly.push(name);
       this.cardQuantityByName.set(name, +quantity);
-    })
+    });
 
     // Get the cards (75 at a time)
+    this.pendingOperations.push(true);
     this.cardService.getCards(this.cardNamesOnly.slice(0, 75)).subscribe(cardList => {
+      // Done loading?
+      this.pendingOperations.pop();
+      if (this.pendingOperations.length === 0) {
+        this.loadingCards = false;
+      }
+      
       this.cardList = this.cardList.concat(cardList.data);
       this.sortDeck();
       cardList.data.forEach(card => this.processCard(card));
@@ -89,8 +100,15 @@ export class CardListComponent implements OnInit {
     });
     var extraNames = this.cardNamesOnly.slice(75);
     while (extraNames.length > 0) {
+      this.pendingOperations.push(true);
       var names = extraNames.splice(75);
       this.cardService.getCards(extraNames).subscribe(cardList => {
+        // Done loading?
+        this.pendingOperations.pop();
+        if (this.pendingOperations.length === 0) {
+          this.loadingCards = false;
+        }
+        
         this.cardList = this.cardList.concat(cardList.data);
         this.sortDeck();
         cardList.data.forEach(card => this.processCard(card));
@@ -190,7 +208,14 @@ export class CardListComponent implements OnInit {
         return;
       }
       this.tokenIdList.push(token.id);
+      this.pendingOperations.push(true)
       this.cardService.getToken(token).subscribe((t: Card) => {
+        // Done loading?
+        this.pendingOperations.pop();
+        if (this.pendingOperations.length === 0) {
+          this.loadingCards = false;
+        }
+
         if (this.tokenList.find(a => a.oracle_id === t.oracle_id)) {
           return;
         }
