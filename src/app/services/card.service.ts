@@ -261,71 +261,111 @@ export class CardService {
     }
     
     // Flip cards
-    deckObject.ObjectStates.push({
-      Name: "Deck",
-      Transform: this.flipCardsTransform,
-      Nickname: "Flip Cards",
-      Description: "",
-      DeckIDs: [],
-      CustomDeck: {},
-      ContainedObjects: [],
-    });
-    cardList.forEach(card => {
-      if (!card.back_image_uris) {
-        return;
+    var flipCards: Card[] = cardList.filter(c => c.back_image_uris);
+    if (flipCards.length > 1) {
+      deckObject.ObjectStates.push({
+        Name: "Deck",
+        Transform: this.flipCardsTransform,
+        Nickname: "Flip Cards",
+        Description: "",
+        DeckIDs: [],
+        CustomDeck: {},
+        ContainedObjects: [],
+      });
+      flipCards.forEach(card => {
+        for(var i = 0; i < card.quantity; i++) {
+          deckObject.ObjectStates[2].ContainedObjects.push({
+            Name: "Card",
+            Transform: this.defaultTransform,
+            CardID: cardId * 100,
+            Nickname: card.name,
+            Description: card.oracle_text
+          });
+          deckObject.ObjectStates[2].DeckIDs.push(cardId * 100);
+        }
+        deckObject.ObjectStates[2].CustomDeck[cardId] = {
+          FaceURL: card.image_uris[quality],
+          BackURL: card.back_image_uris[quality],
+          NumWidth: 1,
+          NumHeight: 1,
+          BackIsHidden: true,
+          UniqueBack: true,
+          Type: 0
+        };
+        cardId++;
+      });
+    } else {
+      deckObject.ObjectStates.push({
+        Name: "Card",
+        Transform: this.flipCardsTransform,
+        CardID: cardId * 100,
+        Nickname: flipCards[0].name,
+        Description: flipCards[0].oracle_text,
+        CustomDeck: {}
+      });
+      deckObject.ObjectStates[2].CustomDeck[cardId] = {
+        FaceURL: flipCards[0].image_uris[quality],
+        BackURL: flipCards[0].back_image_uris ? flipCards[0].back_image_uris[quality] : cardBack,
+        NumWidth: 1,
+        NumHeight: 1,
+        BackIsHidden: true,
+        UniqueBack: false,
+        Type: 0
       }
-      for(var i = 0; i < card.quantity; i++) {
-        deckObject.ObjectStates[2].ContainedObjects.push({
+      cardId++;
+    }
+    
+    // Tokens
+    if (tokenList.length > 1) {
+      deckObject.ObjectStates.push({
+        Name: "Deck",
+        Transform: this.tokensTransform,
+        Nickname: "Tokens",
+        Description: "",
+        DeckIDs: [],
+        CustomDeck: {},
+        ContainedObjects: [],
+      });
+      tokenList.forEach(card => {
+        deckObject.ObjectStates[3].ContainedObjects.push({
           Name: "Card",
           Transform: this.defaultTransform,
           CardID: cardId * 100,
           Nickname: card.name,
           Description: card.oracle_text
         });
-        deckObject.ObjectStates[2].DeckIDs.push(cardId * 100);
-      }
-      deckObject.ObjectStates[2].CustomDeck[cardId] = {
-        FaceURL: card.image_uris[quality],
-        BackURL: card.back_image_uris[quality],
-        NumWidth: 1,
-        NumHeight: 1,
-        BackIsHidden: true,
-        UniqueBack: true,
-        Type: 0
-      };
-      cardId++;
-    });
-    
-    // Tokens
-    deckObject.ObjectStates.push({
-      Name: "Deck",
-      Transform: this.tokensTransform,
-      Nickname: "Tokens",
-      Description: "",
-      DeckIDs: [],
-      CustomDeck: {},
-      ContainedObjects: [],
-    });
-    tokenList.forEach(card => {
-      deckObject.ObjectStates[3].ContainedObjects.push({
-        Name: "Card",
-        Transform: this.defaultTransform,
-        CardID: cardId * 100,
-        Nickname: card.name,
-        Description: card.oracle_text
+        deckObject.ObjectStates[3].DeckIDs.push(cardId * 100);
+        deckObject.ObjectStates[3].CustomDeck[cardId] = {
+          FaceURL: card.image_uris[quality],
+          BackURL: card.back_image_uris ? card.back_image_uris[quality] : cardBack,
+          NumWidth: 1,
+          NumHeight: 1,
+          BackIsHidden: true,
+          UniqueBack: false,
+          Type: 0
+        };
+        cardId++;
       });
-      deckObject.ObjectStates[3].DeckIDs.push(cardId * 100);
+    } else {
+      deckObject.ObjectStates.push({
+        Name: "Card",
+        Transform: this.tokensTransform,
+        CardID: cardId * 100,
+        Nickname: tokenList[0].name,
+        Description: tokenList[0].oracle_text,
+        CustomDeck: {}
+      });
       deckObject.ObjectStates[3].CustomDeck[cardId] = {
-        FaceURL: card.image_uris[quality],
-        BackURL: card.back_image_uris ? card.back_image_uris[quality] : cardBack,
+        FaceURL: tokenList[0].image_uris[quality],
+        BackURL: tokenList[0].back_image_uris ? tokenList[0].back_image_uris[quality] : cardBack,
         NumWidth: 1,
         NumHeight: 1,
         BackIsHidden: true,
         UniqueBack: false,
         Type: 0
-      };
+      }
       cardId++;
-    });
+    }
 
     console.log(deckObject);
 
