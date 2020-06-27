@@ -1,0 +1,13 @@
+<mat-form-field appearance="fill" style="width: 100%">
+    <mat-label>Import Deck List</mat-label>
+    <textarea matInput [formControl]="cardNamesString" style="height: 250px"></textarea>
+</mat-form-field>
+<br>
+<div class="row">
+    <div class="col-xl-11"></div>
+    <div class="col-xl-1">
+        <button mat-raised-button color="primary" class="float-right mr-5" (click)="searchCards()">Import</button>
+    </div>
+</div>
+<mat-divider class="my-3"></mat-divider>
+<app-card-list [cardNames]="cardNamesArray"></app-card-list>

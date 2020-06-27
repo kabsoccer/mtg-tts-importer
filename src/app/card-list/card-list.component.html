@@ -1,0 +1,70 @@
+<div class="mb-3">
+    <mat-form-field appearance="fill" class="mr-3" style="width: 20rem">
+        <mat-label>Deck Name</mat-label>
+        <input matInput placeholder="Ex: Elesh Norn's Boardwipe Emporium" [formControl]="deckName" required>
+        <mat-error *ngIf="deckName.invalid">Please enter a deck name</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="mr-3" style="width: 20rem">
+        <mat-label>Card Back Image URL</mat-label>
+        <input matInput placeholder="http://example.com/12345.jpg" [formControl]="cardBack" (blur)="updateCardBackPreview()">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Quality</mat-label>
+        <mat-select [formControl]="imgQuality">
+            <mat-option *ngFor="let quality of imgQualityOptions" [value]="quality.value">{{quality.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="exportCards()" class="ml-3" style="bottom: 0.5rem;" [disabled]="!isDeckValid()">Export</button>
+</div>
+<div class="example-action-buttons mb-1" *ngIf="cardCount > 0 || commanderCards.length">
+    <button mat-button (click)="accordion.openAll()">Expand All</button>
+    <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+</div>
+<mat-accordion multi *ngIf="cardCount > 0 || commanderCards.length">
+    <mat-expansion-panel hideToggle expanded="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+        <h2 class="mb-0">Commander ({{commanderCards.length}})</h2>
+        </mat-panel-title>
+        <mat-panel-description>
+            <mat-error *ngIf="!commanderCards.length" style="line-height: 32px;">Please choose a commander</mat-error>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="row">
+        <ng-container *ngIf="!commanderCards.length">
+            <app-card-detail class="mr-3 my-3" *ngFor="let commanderSuggestion of commanderSuggestions" [card]="commanderSuggestion" [quality]="imgQuality.value" (commanderSelected)="setCommander($event)"></app-card-detail>
+        </ng-container>
+        <app-card-detail class="mr-3 my-3" *ngFor="let commanderCard of commanderCards" [card]="commanderCard" [quality]="imgQuality.value" (commanderDeselected)="unsetCommander($event)"></app-card-detail>    
+    </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel hideToggle expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+            <h2 class="mb-0">Main Deck ({{cardCount}})</h2>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row">
+            <app-card-detail class="mr-3 my-3" *ngFor="let card of cardList" [card]="card" [quality]="imgQuality.value" (commanderSelected)="setCommander($event)"></app-card-detail>
+        </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel hideToggle expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+            <h2 class="mb-0">Tokens ({{tokenList.length}})</h2>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row">
+            <app-card-detail class="mr-3 my-3" *ngFor="let card of tokenList" [card]="card" [quality]="imgQuality.value" (commanderSelected)="setCommander($event)"></app-card-detail>
+        </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel hideToggle expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+            <h2 class="mb-0">Card Back</h2>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row">
+            <app-card-detail class="mr-3 my-3" [card]="cardBackPreview" quality="normal"></app-card-detail>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,32 @@
+<div class="col" style="width: 330px">
+    <mat-card [matBadge]="card.quantity" matBadgePosition="before" matBadgeColor="accent" class="center-block text-center"> <!--class="center-block text-center"> -->
+        <mat-card-content class="mb-0">
+            <img class="card-thumb img-fluid" [src]="cardImg">
+            <h4 class="card-sub mx-auto my-0">{{card.name}}</h4>
+        </mat-card-content>
+        <mat-card-actions class="mb-0 pb-0">
+            <div *ngIf="showSet" style="max-width: 200px; display: inline">
+                <mat-form-field appearance="fill" style="margin-left: 40px">
+                    <mat-select [formControl]="set" (selectionChange)="changeSet()">
+                        <mat-option *ngFor="let setOption of setOptions" [value]=setOption.id>{{setOption.display}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-icon-button style="bottom: 0.5rem" (click)="showSet = false">
+                    <mat-icon>done</mat-icon>
+                </button>
+            </div>
+            <button mat-icon-button matTooltip="Pick card printing" *ngIf="!showSet && allowSetChange" (click)="getSets()">
+                <mat-icon>style</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Set as commander" *ngIf="canBeCommander()" (click)="setCommander()">
+                <mat-icon>security</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Unset as commander" *ngIf="card.isCommander" (click)="unsetCommander()">
+                <mat-icon>person_remove</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Flip card" *ngIf="card.card_faces" (click)="toggleCardBack()">
+                <mat-icon>360</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
