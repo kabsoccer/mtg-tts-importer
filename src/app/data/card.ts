@@ -24,7 +24,8 @@ export interface Card {
         border_crop: string,
         art_crop: string
     },
-    all_parts: Token[]
+    all_parts: Token[],
+    layout: string
 };
 
 export interface Token {

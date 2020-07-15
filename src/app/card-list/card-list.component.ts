@@ -185,7 +185,7 @@ export class CardListComponent implements OnInit {
     }
 
     // Check flip card
-    if (card.card_faces) {
+    if (card.layout === "transform") {
       this.getFaceCard(card);
     }
     // Check tokens
@@ -220,7 +220,7 @@ export class CardListComponent implements OnInit {
           return;
         }
         this.tokenList.push(t);
-        if (t.card_faces) {
+        if (t.layout === "transform") {
           this.getFaceCard(t);
         }
         this.tokenList = this.tokenList.sort((a, b) => a.name.localeCompare(b.name))

@@ -56,7 +56,7 @@ export class CardService {
     "scaleZ": 1.0
   }
   flipCardsTransform: TransformObject = {
-    "posX": 2.5,
+    "posX": 5,
     "posY": 0,
     "posZ": 0,
     "rotX": 0,
@@ -67,7 +67,7 @@ export class CardService {
     "scaleZ": 1.0
   }
   tokensTransform: TransformObject = {
-    "posX": 5,
+    "posX": 2.5,
     "posY": 0,
     "posZ": 0,
     "rotX": 0,
@@ -183,20 +183,21 @@ export class CardService {
     });
 
     var cardId: number = 1;
+    var deckObjectIndex = 0;
     
     // Main Deck
     cardList.forEach(card => {
       for(var i = 0; i < card.quantity; i++) {
-        deckObject.ObjectStates[0].ContainedObjects.push({
+        deckObject.ObjectStates[deckObjectIndex].ContainedObjects.push({
           Name: "Card",
           Transform: this.defaultTransform,
           CardID: cardId * 100,
           Nickname: card.name,
           Description: card.oracle_text
         });
-        deckObject.ObjectStates[0].DeckIDs.push(cardId * 100);
+        deckObject.ObjectStates[deckObjectIndex].DeckIDs.push(cardId * 100);
       }
-      deckObject.ObjectStates[0].CustomDeck[cardId] = {
+      deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
         FaceURL: card.image_uris[quality],
         BackURL: cardBack,
         NumWidth: 1,
@@ -219,16 +220,17 @@ export class CardService {
         CustomDeck: {},
         ContainedObjects: [],
       });
+      deckObjectIndex++;
       commanderCards.forEach(card => {
-        deckObject.ObjectStates[1].ContainedObjects.push({
+        deckObject.ObjectStates[deckObjectIndex].ContainedObjects.push({
           Name: "Card",
           Transform: this.defaultTransform,
           CardID: cardId * 100,
           Nickname: card.name,
           Description: card.oracle_text
         });
-        deckObject.ObjectStates[1].DeckIDs.push(cardId * 100);
-        deckObject.ObjectStates[1].CustomDeck[cardId] = {
+        deckObject.ObjectStates[deckObjectIndex].DeckIDs.push(cardId * 100);
+        deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
           FaceURL: card.image_uris[quality],
           BackURL: card.back_image_uris ? card.back_image_uris[quality] : cardBack,
           NumWidth: 1,
@@ -248,7 +250,8 @@ export class CardService {
         Description: commanderCards[0].oracle_text,
         CustomDeck: {}
       });
-      deckObject.ObjectStates[1].CustomDeck[cardId] = {
+      deckObjectIndex++;
+      deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
         FaceURL: commanderCards[0].image_uris[quality],
         BackURL: commanderCards[0].back_image_uris ? commanderCards[0].back_image_uris[quality] : cardBack,
         NumWidth: 1,
@@ -272,18 +275,19 @@ export class CardService {
         CustomDeck: {},
         ContainedObjects: [],
       });
+      deckObjectIndex++;
       flipCards.forEach(card => {
         for(var i = 0; i < card.quantity; i++) {
-          deckObject.ObjectStates[2].ContainedObjects.push({
+          deckObject.ObjectStates[deckObjectIndex].ContainedObjects.push({
             Name: "Card",
             Transform: this.defaultTransform,
             CardID: cardId * 100,
             Nickname: card.name,
             Description: card.oracle_text
           });
-          deckObject.ObjectStates[2].DeckIDs.push(cardId * 100);
+          deckObject.ObjectStates[deckObjectIndex].DeckIDs.push(cardId * 100);
         }
-        deckObject.ObjectStates[2].CustomDeck[cardId] = {
+        deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
           FaceURL: card.image_uris[quality],
           BackURL: card.back_image_uris[quality],
           NumWidth: 1,
@@ -294,7 +298,7 @@ export class CardService {
         };
         cardId++;
       });
-    } else {
+    } else if (flipCards.length > 0) {
       deckObject.ObjectStates.push({
         Name: "Card",
         Transform: this.flipCardsTransform,
@@ -303,7 +307,8 @@ export class CardService {
         Description: flipCards[0].oracle_text,
         CustomDeck: {}
       });
-      deckObject.ObjectStates[2].CustomDeck[cardId] = {
+      deckObjectIndex++;
+      deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
         FaceURL: flipCards[0].image_uris[quality],
         BackURL: flipCards[0].back_image_uris ? flipCards[0].back_image_uris[quality] : cardBack,
         NumWidth: 1,
@@ -326,16 +331,17 @@ export class CardService {
         CustomDeck: {},
         ContainedObjects: [],
       });
+      deckObjectIndex++;
       tokenList.forEach(card => {
-        deckObject.ObjectStates[3].ContainedObjects.push({
+        deckObject.ObjectStates[deckObjectIndex].ContainedObjects.push({
           Name: "Card",
           Transform: this.defaultTransform,
           CardID: cardId * 100,
           Nickname: card.name,
           Description: card.oracle_text
         });
-        deckObject.ObjectStates[3].DeckIDs.push(cardId * 100);
-        deckObject.ObjectStates[3].CustomDeck[cardId] = {
+        deckObject.ObjectStates[deckObjectIndex].DeckIDs.push(cardId * 100);
+        deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
           FaceURL: card.image_uris[quality],
           BackURL: card.back_image_uris ? card.back_image_uris[quality] : cardBack,
           NumWidth: 1,
@@ -346,7 +352,7 @@ export class CardService {
         };
         cardId++;
       });
-    } else {
+    } else if (tokenList.length > 0) {
       deckObject.ObjectStates.push({
         Name: "Card",
         Transform: this.tokensTransform,
@@ -355,7 +361,8 @@ export class CardService {
         Description: tokenList[0].oracle_text,
         CustomDeck: {}
       });
-      deckObject.ObjectStates[3].CustomDeck[cardId] = {
+      deckObjectIndex++;
+      deckObject.ObjectStates[deckObjectIndex].CustomDeck[cardId] = {
         FaceURL: tokenList[0].image_uris[quality],
         BackURL: tokenList[0].back_image_uris ? tokenList[0].back_image_uris[quality] : cardBack,
         NumWidth: 1,
