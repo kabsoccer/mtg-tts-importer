@@ -3,6 +3,7 @@ import { CardService } from '../services/card.service';
 import { Card, Token } from '../data/card';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
+import { CardCollectionParam } from '../data/card-collection';
 
 @Component({
   selector: 'app-card-list',
@@ -23,6 +24,8 @@ export class CardListComponent implements OnInit {
   commanderSuggestions: Card[] = [];
   cardNamesOnly: string[];
   cardQuantityByName: Map<string, number> = new Map();
+  notFound: CardCollectionParam[];
+  notFoundNames: string[];
   tokenList: Card[];
   tokenIdList: string[];
   cardBackPreview: Card = {
@@ -60,6 +63,8 @@ export class CardListComponent implements OnInit {
     this.cardList = [];
     this.cardCount = 0;
     this.cardNamesOnly = [];
+    this.notFound = [];
+    this.notFoundNames = [];
     this.tokenList = [];
     this.tokenIdList = [];
     this.commanderSuggestions = [];
@@ -97,6 +102,11 @@ export class CardListComponent implements OnInit {
       cardList.data.forEach(card => this.processCard(card));
       this.updateCount();
       console.log(this.cardList);
+
+      this.notFound = this.notFound.concat(cardList.not_found);
+      this.notFoundNames = this.notFoundNames.concat(this.notFound.map(item => item.name));
+
+      console.log(this.notFoundNames);
     });
     var extraNames = this.cardNamesOnly.slice(75);
     while (extraNames.length > 0) {
@@ -114,6 +124,11 @@ export class CardListComponent implements OnInit {
         cardList.data.forEach(card => this.processCard(card));
         this.updateCount();
         console.log(this.cardList);
+
+        this.notFound = this.notFound.concat(cardList.not_found);
+        this.notFoundNames = this.notFoundNames.concat(this.notFound.map(item => item.name));
+
+        console.log(this.notFoundNames);
       });
       extraNames = names;
     }
@@ -185,14 +200,20 @@ export class CardListComponent implements OnInit {
     }
 
     // Check flip card
-    if (card.layout === "transform") {
+    if (card.layout === "transform" || card.layout === "modal_dfc") {
       this.getFaceCard(card);
     }
     // Check tokens
     if (card.all_parts) {
       this.getTokensForCard(card);
     }
+
+    // Look for card by name
     card.quantity = this.cardQuantityByName.get(card.name);
+    // If not found, trim double-sided format
+    if (!card.quantity) {
+      card.quantity = this.cardQuantityByName.get(card.name.split("//")[0].trim());
+    }
   }
 
   private getFaceCard(card: Card): void {
@@ -220,7 +241,7 @@ export class CardListComponent implements OnInit {
           return;
         }
         this.tokenList.push(t);
-        if (t.layout === "transform") {
+        if (t.layout === "transform" || t.layout === "modal_dfc") {
           this.getFaceCard(t);
         }
         this.tokenList = this.tokenList.sort((a, b) => a.name.localeCompare(b.name))

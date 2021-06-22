@@ -1,3 +1,7 @@
 .mat-expansion-panel-body, .mat-expansion-panel {
     background-color: #fafafa!important;
 }
+
+.row.card-display {
+    justify-content: flex-start;
+}

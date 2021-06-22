@@ -24,7 +24,7 @@
             <button mat-icon-button matTooltip="Unset as commander" *ngIf="card.isCommander" (click)="unsetCommander()">
                 <mat-icon>person_remove</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Flip card" *ngIf="card.layout === 'transform'" (click)="toggleCardBack()">
+            <button mat-icon-button matTooltip="Flip card" *ngIf="card.layout === 'transform' || card.layout === 'modal_dfc'" (click)="toggleCardBack()">
                 <mat-icon>360</mat-icon>
             </button>
         </mat-card-actions>

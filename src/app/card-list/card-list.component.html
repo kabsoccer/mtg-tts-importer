@@ -16,6 +16,10 @@
     </mat-form-field>
     <button mat-raised-button color="accent" (click)="exportCards()" class="ml-3" style="bottom: 0.5rem;" [disabled]="!isDeckValid()">Export</button>
 </div>
+<div class="error-messages mb-3" *ngIf="notFoundNames.length > 0">
+    <mat-error>Error - Could not find the following card names:</mat-error>
+    <mat-error *ngFor="let name of notFoundNames">{{name}}</mat-error>
+</div>
 <mat-spinner *ngIf="loadingCards" class="mx-auto"></mat-spinner>
 <div class="example-action-buttons mb-1" *ngIf="(cardCount > 0 || commanderCards.length) && !loadingCards">
     <button mat-button (click)="accordion.openAll()">Expand All</button>
@@ -31,7 +35,7 @@
             <mat-error *ngIf="!commanderCards.length" style="line-height: 32px;">Please choose a commander</mat-error>
         </mat-panel-description>
     </mat-expansion-panel-header>
-    <div class="row">
+    <div class="row card-display">
         <ng-container *ngIf="!commanderCards.length">
             <app-card-detail class="mr-3 my-3" *ngFor="let commanderSuggestion of commanderSuggestions" [card]="commanderSuggestion" [quality]="imgQuality.value" (commanderSelected)="setCommander($event)"></app-card-detail>
         </ng-container>
@@ -44,7 +48,7 @@
             <h2 class="mb-0">Main Deck ({{cardCount}})</h2>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="row">
+        <div class="row card-display">
             <app-card-detail class="mr-3 my-3" *ngFor="let card of cardList" [card]="card" [quality]="imgQuality.value" (commanderSelected)="setCommander($event)"></app-card-detail>
         </div>
     </mat-expansion-panel>
@@ -54,7 +58,7 @@
             <h2 class="mb-0">Tokens ({{tokenList.length}})</h2>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="row">
+        <div class="row card-display">
             <app-card-detail class="mr-3 my-3" *ngFor="let card of tokenList" [card]="card" [quality]="imgQuality.value" (commanderSelected)="setCommander($event)"></app-card-detail>
         </div>
     </mat-expansion-panel>

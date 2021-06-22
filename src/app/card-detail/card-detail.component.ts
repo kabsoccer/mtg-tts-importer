@@ -58,7 +58,7 @@ export class CardDetailComponent implements OnInit {
   changeSet() {
     //console.log(this.set.value);
     var cardToSet = this.setData.find(card => card.id === this.set.value);
-    if (cardToSet.layout === "transform") {
+    if (cardToSet.layout === "transform"  || cardToSet.layout === 'modal_dfc') {
       cardToSet.image_uris = cardToSet.card_faces[0].image_uris;
       cardToSet.back_image_uris = cardToSet.card_faces[1].image_uris;
     }

@@ -115,11 +115,11 @@ export class CardService {
     var collection: CardCollection = {"identifiers": []};
     var cardCollectionReturn: CardCollectionReturn = {"not_found": [], "data": []};
     names.forEach(name => {
-      if (this.cache[name.toLowerCase()]) {
+      if (this.cache[this.splitMultiFaceName(name).toLowerCase()]) {
         console.log(name + " found in cache!");
-        cardCollectionReturn.data.push(this.cache[name.toLowerCase()]);
+        cardCollectionReturn.data.push(this.cache[this.splitMultiFaceName(name).toLowerCase()]);
       } else {
-        collection.identifiers.push({"name": name} as CardCollectionParam);
+        collection.identifiers.push({"name": this.splitMultiFaceName(name)} as CardCollectionParam);
       }
     });
     //console.log(collection);
@@ -131,7 +131,7 @@ export class CardService {
       shareReplay(1),
       tap(el => {
         console.log('fetching collection');
-        el.data.forEach(card => {this.cache[card.name.toLowerCase()] = card});
+        el.data.forEach(card => {this.cache[this.splitMultiFaceName(card.name).toLowerCase()] = card});
         el.data = el.data.concat(cardCollectionReturn.data);
         if (el.not_found.length > 0) {
           el.not_found.forEach(card => console.log("Card not found: " + card.name));
@@ -390,5 +390,12 @@ export class CardService {
   private handleError<T>(operation: string, result?: T): Observable<T> {
     console.log("error during " + operation);
     return of(result as T);
+  }
+
+  private splitMultiFaceName(name: string): string {
+    if (name.includes("//")) {
+      return name.split("//")[0].trim();
+    }
+    return name;
   }
 }
